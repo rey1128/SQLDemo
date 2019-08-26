@@ -19,13 +19,13 @@ def delete_all_articles():
 
 
 def delete_article_by_id(a_id):
-    dele = article.delete().where(article.c.id == a_id)
+    dele = article.delete().where(article.c.article_id== a_id)
     execute_stmt(dele, db_engine)
     pass
 
 
 def update_article_by_id(a_id, title, cont):
-    upd = article.update().where(article.c.id == a_id).values(title=title, content=cont)
+    upd = article.update().where(article.c.article_id == a_id).values(title=title, content=cont)
     execute_stmt(upd, db_engine)
     pass
 
@@ -37,7 +37,7 @@ def get_all_articles():
 
 
 def get_article_by_id(a_id):
-    sel = article.select().where(article.c.id == a_id)
+    sel = article.select().where(article.c.article_id == a_id)
     rt = execute_stmt(sel, db_engine)
     return rt
 

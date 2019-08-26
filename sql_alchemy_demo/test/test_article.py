@@ -11,6 +11,7 @@ class TestArticle(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls):
+        print('init')
         from sql_alchemy_demo.db.db_commons import meta, db_engine
         meta.create_all(db_engine)
         srv.create_article('init_article', 'init_user', 'this is an article for initialization')
@@ -19,6 +20,7 @@ class TestArticle(unittest.TestCase):
 
     @classmethod
     def tearDownClass(cls):
+        print('clean up')
         from sql_alchemy_demo.db.db_commons import meta, db_engine
         meta.drop_all(db_engine)
         pass
