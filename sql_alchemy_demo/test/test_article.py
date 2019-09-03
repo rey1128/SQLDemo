@@ -1,6 +1,7 @@
 import unittest
 
 import sql_alchemy_demo.db.article_service as srv
+import sql_alchemy_demo.db.user_service as user_srv
 import sql_alchemy_demo.db.db_commons as db_commons
 import datetime
 
@@ -14,8 +15,9 @@ class TestArticle(unittest.TestCase):
         print('init')
         from sql_alchemy_demo.db.db_commons import meta, db_engine
         meta.create_all(db_engine)
-        srv.create_article('init_article', 'init_user', 'this is an article for initialization')
-        srv.create_article('article_for_deletion', 'init_user', 'this is an article for initialization')
+        user_id = user_srv.create_user('init_user')
+        srv.create_article('init_article', user_id, 'this is an article for initialization')
+        srv.create_article('article_for_deletion', user_id, 'this is an article for initialization')
         pass
 
     @classmethod
@@ -33,27 +35,27 @@ class TestArticle(unittest.TestCase):
         pass
 
     def test_get_article_by_title(self):
-        rt = srv.get_article_by_title('no_such_article')
+        rt = srv.get_articles_by_title('no_such_article')
         article = rt.fetchone()
         self.assertIsNone(article)
         pass
 
     def test_create_article(self):
         title = 'test_article'
-        user = 'test_user'
+        user = 1
         cont = 'this is a test article'
 
-        rt = srv.get_article_by_title(title)
+        rt = srv.get_articles_by_title(title)
         article = rt.fetchone()
         self.assertIsNone(article)
 
-        srv.create_article(title=title, post_user=user, cont=cont)
+        srv.create_article(title=title, post_user_id=user, cont=cont)
 
-        rt = srv.get_article_by_title(title)
+        rt = srv.get_articles_by_title(title)
         article = rt.fetchone()
         self.assertIsNotNone(article)
         self.assertEqual(title, article.title)
-        self.assertEqual(user, article.post_user)
+        self.assertEqual(user, article.post_user_id)
         self.assertEqual(cont, article.content)
         self.assertEqual(1, article.votes)
         self.assertEqual(VOTE_SCORE, article.score)
